@@ -4,7 +4,7 @@ import SwiftUI
 struct LikeButtonExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            LikeButtonView()
+            ContentView()
         }
     }
 }

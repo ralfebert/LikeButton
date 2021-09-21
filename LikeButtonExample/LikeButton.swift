@@ -1,6 +1,51 @@
 import SwiftUI
 
-struct CirclesView: View {
+public struct LikeButton: View {
+    @State private var scale = 1.0
+    @State private var opacity = 0.0
+    @Binding public var isLiked: Bool
+
+    public var body: some View {
+        ZStack {
+            Group {
+                Image(systemName: "heart.fill")
+                    .opacity(isLiked ? 1 : 0)
+                    .scaleEffect(isLiked ? 1.0 : 0.1)
+                    .animation(.easeOut)
+
+                Image(systemName: "heart")
+            }
+            .imageScale(.large)
+            .scaleEffect(1.5)
+
+            Group {
+                DotsView(count: 9, radius: 30, speed: 0.1, scale: self.isLiked ? 0.1 : 0.8)
+                DotsView(count: 9, radius: 35, speed: 0.2, scale: self.isLiked ? 0.1 : 0.6)
+                    .rotationEffect(Angle(degrees: 20))
+            }
+            .opacity(self.opacity)
+        }
+        .onTapGesture {
+            self.isLiked.toggle()
+        }
+        .onChange(of: self.isLiked) { isLiked in
+            self.scale = 1.0
+            if isLiked {
+                withAnimation(.linear(duration: 0.2)) {
+                    self.scale = 1.3
+                    self.opacity = 1
+                }
+                withAnimation(.linear(duration: 0.1).delay(0.2)) {
+                    self.opacity = 0
+                }
+            }
+        }
+        .scaleEffect(self.scale)
+        .foregroundColor(isLiked ? .red : .gray)
+    }
+}
+
+struct DotsView: View {
     let count: Int
     let radius: CGFloat
     let speed: Double
@@ -25,51 +70,10 @@ struct CirclesView: View {
     }
 }
 
-struct LikeButtonView: View {
-    @State var scale = 1.0
-    @State var opacity = 0.0
-    @State var isLiked = false
-
-    var body: some View {
-        ZStack {
-            ZStack {
-                Image(systemName: "heart.fill")
-                    .opacity(isLiked ? 1 : 0)
-                    .scaleEffect(isLiked ? 1.0 : 0.1)
-                    .animation(.easeOut)
-
-                Image(systemName: "heart")
-            }
-            .imageScale(.large)
-            .scaleEffect(1.5)
-
-            Group {
-                CirclesView(count: 9, radius: 30, speed: 0.1, scale: self.isLiked ? 0.1 : 0.8)
-                CirclesView(count: 9, radius: 35, speed: 0.2, scale: self.isLiked ? 0.1 : 0.6)
-                    .rotationEffect(Angle(degrees: 20))
-            }
-            .opacity(self.opacity)
-        }
-        .onTapGesture {
-            self.isLiked.toggle()
-            self.scale = 1.0
-            if isLiked {
-                withAnimation(.linear(duration: 0.2)) {
-                    self.scale = 1.3
-                    self.opacity = 1
-                }
-                withAnimation(.linear(duration: 0.1).delay(0.2)) {
-                    self.opacity = 0
-                }
-            }
-        }
-        .scaleEffect(self.scale)
-        .foregroundColor(isLiked ? .red : .gray)
-    }
-}
-
 struct LikeButton_Previews: PreviewProvider {
+    @State static var isLiked = false
+
     static var previews: some View {
-        LikeButtonView()
+        LikeButton(isLiked: $isLiked)
     }
 }
