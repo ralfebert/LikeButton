@@ -16,14 +16,14 @@ public struct LikeButton: View {
                 Image(systemName: "heart")
             }
             .imageScale(.large)
-            .scaleEffect(1.5)
-
-            Group {
-                DotsView(count: 9, radius: 30, speed: 0.1, scale: self.isLiked ? 0.1 : 0.8)
-                DotsView(count: 9, radius: 35, speed: 0.2, scale: self.isLiked ? 0.1 : 0.6)
-                    .rotationEffect(Angle(degrees: 20))
-            }
-            .opacity(self.opacity)
+            .overlay(
+                Group {
+                    DotsView(count: 9, radius: 20, speed: 0.1, scale: self.isLiked ? 0.1 : 0.8)
+                    DotsView(count: 9, radius: 25, speed: 0.2, scale: self.isLiked ? 0.1 : 0.6)
+                        .rotationEffect(Angle(degrees: 20))
+                }
+                .opacity(self.opacity)
+            )
         }
         .onTapGesture {
             self.isLiked.toggle()
@@ -32,7 +32,7 @@ public struct LikeButton: View {
             self.scale = 1.0
             if isLiked {
                 withAnimation(.linear(duration: 0.2)) {
-                    self.scale = 1.3
+                    self.scale = 1.2
                     self.opacity = 1
                 }
                 withAnimation(.linear(duration: 0.1).delay(0.2)) {
@@ -67,13 +67,5 @@ struct DotsView: View {
 
     func angle(index: Int) -> Angle {
         Angle(degrees: (360 / Double(self.count)) * Double(index))
-    }
-}
-
-struct LikeButton_Previews: PreviewProvider {
-    @State static var isLiked = false
-
-    static var previews: some View {
-        LikeButton(isLiked: $isLiked)
     }
 }
