@@ -25,7 +25,6 @@ struct DotsView: View {
     }
 }
 
-
 struct DotsView_Previews: PreviewProvider {
     static var previews: some View {
         DotsView()
