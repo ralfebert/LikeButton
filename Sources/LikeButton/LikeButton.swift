@@ -11,7 +11,7 @@ public struct LikeButton: View {
                 Image(systemName: "heart.fill")
                     .opacity(isLiked ? 1 : 0)
                     .scaleEffect(isLiked ? 1.0 : 0.1)
-                    .animation(.easeOut)
+                    .animation(.easeOut, value: self.isLiked)
 
                 Image(systemName: "heart")
             }
@@ -41,31 +41,31 @@ public struct LikeButton: View {
             }
         }
         .scaleEffect(self.scale)
-        .foregroundColor(isLiked ? .red : .gray)
+        .foregroundColor(isLiked ? .red : .secondary)
     }
 }
 
-struct DotsView: View {
-    let count: Int
-    let radius: CGFloat
-    let speed: Double
-    let scale: CGFloat
+#if DEBUG
+struct LikeButtonExampleView: View {
+    @State var isLiked = false
 
     var body: some View {
-        ZStack {
-            ForEach(0 ..< count) { idx in
-                Circle()
-                    .fill(Color.red)
-                    .frame(width: 10)
-                    .scaleEffect(self.scale)
-                    .animation(.linear(duration: self.speed))
-                    .offset(y: -self.radius)
-                    .rotationEffect(angle(index: idx))
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 15) {
+                Text("Lorem Ipsum")
+                    .font(.headline)
             }
+            Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.")
+            LikeButton(isLiked: $isLiked)
+            Spacer()
         }
-    }
-
-    func angle(index: Int) -> Angle {
-        Angle(degrees: (360 / Double(self.count)) * Double(index))
+        .padding()
     }
 }
+
+struct LikeButtonExampleView_Previews: PreviewProvider {
+    static var previews: some View {
+        LikeButtonExampleView()
+    }
+}
+#endif
