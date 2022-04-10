@@ -5,6 +5,10 @@ public struct LikeButton: View {
     @State private var opacity = 0.0
     @Binding public var isLiked: Bool
 
+    public init(isLiked: Binding<Bool>) {
+        self._isLiked = isLiked
+    }
+    
     public var body: some View {
         ZStack {
             Group {
